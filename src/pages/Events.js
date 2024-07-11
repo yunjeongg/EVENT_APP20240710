@@ -4,7 +4,7 @@ import EventSkeleton from '../components/EventSkeleton';
 import { EVENT_URL } from '../config/host-config';
 
 // npm install loadsh
-import { debounce, throttle } from 'lodash';
+// import { debounce, throttle } from 'lodash';
 
 const Events = () => {
 
