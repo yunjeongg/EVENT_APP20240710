@@ -45,7 +45,7 @@ const EmailInput = ( { onSuccess }) => {
 
     // 이메일 중복확인 끝났음을 알리기
     setEmailValid(true);
-    onSuccess();
+    onSuccess(email);
 
   }, 1500);
 

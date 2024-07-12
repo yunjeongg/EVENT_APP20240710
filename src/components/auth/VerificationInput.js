@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './SignUpForm.module.scss';
+import { debounce } from 'lodash';
+import { AUTH_URL } from '../../config/host-config';
 
-const VerificationInput = () => {
+const VerificationInput = ({ email }) => {
 
   // 여러개의 (반복문등) 컴포넌트에 ref를 거는 방법
   const inputsRef = useRef([]); // useRef 의 [] 가 current
 
   // 입력한 인증코드 4자리 저장하기
-  const [codes, setCodes] = useState([]);
+  const [codes, setCodes] = useState(Array(4).fill('')); // 4개의 배열을 빈문자열로 채워놓기
+
+  // 에러 메시지 저장
+  const [error, setError] = useState('');
 
   // 다음 칸으로 포커스를 이동하는 함수
   const focusNextInput = ( index ) => {
@@ -20,13 +25,34 @@ const VerificationInput = () => {
   };
 
   // 서버에 검증요청 보내기
-  const verifyCode = async (code) => {
-    console.log('요청 전송!', code);
-  }
+  // debounce 함수를 사용해 1.5 초 이후 검증요청보내기
+  const verifyCode = debounce(async (code) => {
+    // console.log('요청 전송!', code);
+
+    const response = await fetch (`${AUTH_URL}/code?email=${email}&code=${code}`);
+    const flag = await response.json();
+
+    console.log('코드검증', flag);
+
+    // 검증에 실패했을 때
+    if(!flag) {
+      setError('유효하지 않거나 만료된 코드입니다. 인증코드를 재발송합니다.');
+
+      // 검증에 실패했을 경우 기존 인증코드 상태값 비우기
+      setCodes(Array(4).fill(''));
+
+      // 포커스도 첫 칸으로 이동시키기
+      inputsRef.current[0].focus();
+
+      return;
+    }
+
+  }, 1500);
 
   const changeHandler = (index, inputValue) => {
 
-    const updatedCodes = [ ...codes, inputValue ];
+    const updatedCodes = [ ...codes ];
+    updatedCodes[index - 1] = inputValue ; // 원래인덱스에서 한칸씩 수정하기
     console.log('updatedCodes', updatedCodes);
 
     // 다음 칸 이동 전 codes 변수에 입력한 숫자 담아놓기
@@ -75,11 +101,14 @@ const VerificationInput = () => {
                   // index 번호 보내는 2가지 방법
                   // onChange={changeHandler.bind(null, index + 1)}
                   onChange={(e) => changeHandler(index + 1, e.target.value)}
+                  value={codes[index]}
               />
           ))
         }
 
       </div>
+
+      {error && <p className={styles.errorMessage} > {error} </p>}
 
     </>
   )
