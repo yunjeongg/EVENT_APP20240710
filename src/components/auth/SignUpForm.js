@@ -4,8 +4,12 @@ import EmailInput from './EmailInput';
 import VerificationInput from './VerificationInput';
 import ProgressBar from '../ProgressBar';
 import PasswordInput from './PasswordInput';
+import { AUTH_URL } from '../../config/host-config';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpForm = () => {
+
+  const navigate = useNavigate();
 
   // step 의 단계가 몇단계인지 알 수 있는 상태변수
   const [step, setStep] = useState(1);
@@ -47,6 +51,32 @@ const SignUpForm = () => {
     setPasswordIsValid(isValid);
   }
 
+  // 서버에 회원가입 완료 요청하기
+  const submitHandler = async (e) => {
+
+    e.preventDefault();
+
+    const payload = {
+      email: enteredEmail,
+      password: enteredPassword
+    };
+
+    // console.log('payload', payload);
+
+    const response = await fetch(`${AUTH_URL}/join`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.text();
+
+    if(result) {
+      alert('회원가입에 성공하셨습니다.');
+      navigate('/'); // 메인페이지로 이동
+    }
+  };
+
   useEffect (() => {
 
     // 활성화 여부 감시
@@ -57,27 +87,31 @@ const SignUpForm = () => {
   }, [enteredEmail, passwordIsValid]); // 이 조건에 따라 useEffect 가 다시 실행
 
   return (
-    <div className={styles.signupForm}>
-      <div className={styles.formStepActive}>
+    <form onSubmit={submitHandler}>
 
-        { step === 1 && <EmailInput onSuccess={emailSuccessHandler} /> }
+     <div className={styles.signupForm}>
+        <div className={styles.formStepActive}>
 
-        { step === 2 && <VerificationInput email={enteredEmail} onSuccess={() => nextStep()} /> }
+          { step === 1 && <EmailInput onSuccess={emailSuccessHandler} /> }
 
-        { step === 3 && <PasswordInput onSuccess={passwordSuccessHandler} /> }
+          { step === 2 && <VerificationInput email={enteredEmail} onSuccess={() => nextStep()} /> }
 
-        { activeButton && 
-          <div>
-            <button>
-              회원가입 완료
-            </button>
-          </div>
-        }
+          { step === 3 && <PasswordInput onSuccess={passwordSuccessHandler} /> }
 
-        { success && <ProgressBar /> }
+          { activeButton && 
+            <div>
+              <button>
+                회원가입 완료
+              </button>
+            </div>
+          }
 
+          { success && <ProgressBar /> }
+
+        </div>
       </div>
-    </div>
+
+    </form>
   );
 };
 
