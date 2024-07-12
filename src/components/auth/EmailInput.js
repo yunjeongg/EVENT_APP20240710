@@ -6,7 +6,8 @@ const EmailInput = () => {
   const inputRef = useRef();
 
   // 입력한 이메일
-  const [enteredEmail, setEnteredEmail] = useState('');
+  // 만약 회원가입시 입력창이 여러개인 경우는 필요하지만 여기서는 이메일만 입력하기에 상태변수 필요없음
+  // const [enteredEmail, setEnteredEmail] = useState('');
 
   // 검증여부
   const [emailVaild, setEmailValid] = useState(false);
@@ -41,11 +42,6 @@ const EmailInput = () => {
 
   const changeHandler = (e) => {
     const email = e.target.value;
-    // const isVaild = validateEmail(email);
-    // console.log('isValid: ', isVaild);
-
-    setEnteredEmail(email);
-    // setEmailValid(isVaild);
 
     // 이메일 검증 후속처리
     checkEmail(email);
@@ -72,4 +68,3 @@ const EmailInput = () => {
 };
 
 export default EmailInput;
-
