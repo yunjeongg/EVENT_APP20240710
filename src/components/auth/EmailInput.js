@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './SignUpForm.module.scss';
 import { AUTH_URL } from '../../config/host-config';
+import { debounce } from 'lodash';
 
-const EmailInput = () => {
+const EmailInput = ( { onSuccess }) => {
   const inputRef = useRef();
 
   // 입력한 이메일
@@ -22,7 +23,8 @@ const EmailInput = () => {
   };
 
   // 이메일 검증 후속 처리
-  const checkEmail = async (email) => {
+  // debounce 함수는 콜백함수를 전달하고, 콜백이 얼마 후 시작할 것인지 시간초를 입력
+  const checkEmail = debounce(async (email) => {
     if (!validateEmail(email)) {
       // 에러메시지 세팅
       setError('이메일 형식이 유효하지 않습니다.');
@@ -37,8 +39,15 @@ const EmailInput = () => {
     if (flag) {
       setEmailValid(false);
       setError('이메일이 중복되었습니다.');
+      
+      return;
     }
-  };
+
+    // 이메일 중복확인 끝났음을 알리기
+    setEmailValid(true);
+    onSuccess();
+
+  }, 1500);
 
   const changeHandler = (e) => {
     const email = e.target.value;
