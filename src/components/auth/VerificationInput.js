@@ -14,6 +14,9 @@ const VerificationInput = ({ email }) => {
   // 에러 메시지 저장
   const [error, setError] = useState('');
 
+  // 타이머 시간
+  const [timer, setTimer] = useState(300);
+
   // 다음 칸으로 포커스를 이동하는 함수
   const focusNextInput = ( index ) => {
 
@@ -40,6 +43,9 @@ const VerificationInput = ({ email }) => {
 
       // 검증에 실패했을 경우 기존 인증코드 상태값 비우기
       setCodes(Array(4).fill(''));
+
+      // 타이머 리셋시키기
+      setTimer(300);
 
       // 포커스도 첫 칸으로 이동시키기
       inputsRef.current[0].focus();
@@ -76,10 +82,21 @@ const VerificationInput = ({ email }) => {
   
   }
 
+
   useEffect (() => {
 
     // 처음엔 첫번째 칸에 포커싱하기
     inputsRef.current[0].focus();
+
+    // 타이머 설정
+    const interValid = setInterval(() => {
+      setTimer(prevTime => prevTime > 0 ? prevTime - 1 : 0 ); // 0 보다 크면 1초씩 깍고 0 보다 작으면 0으로 놓기
+    }, 1000);
+
+    // 타이머 리셋
+    return () => {
+      clearInterval(interValid);
+    }
 
   }, []);
   return (
@@ -107,6 +124,8 @@ const VerificationInput = ({ email }) => {
         }
 
       </div>
+      
+      <div className={styles.timer} > {`${'0' + Math.floor(timer / 60)}:${('0' + (timer % 60)).slice(-2)}`} </div>
 
       {error && <p className={styles.errorMessage} > {error} </p>}
 
