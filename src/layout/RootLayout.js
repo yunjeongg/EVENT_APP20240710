@@ -3,6 +3,11 @@ import MainNavigation from './MainNavigation'
 import { Outlet } from 'react-router-dom'
 
 const RootLayout = () => {
+
+  // const data = useLoaderData();
+
+  // console.log('data', data);
+
   return (
     <>
       <MainNavigation />
