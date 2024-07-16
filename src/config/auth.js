@@ -1,3 +1,4 @@
+import { redirect } from "react-router-dom";
 
 // 로그인한 유저의 정보 가져오기
 const getUserData = () => {
@@ -21,3 +22,16 @@ export const userDataLoader = () => {
   // console.log('userDataLoader call !!');
   return getUserData();
 };
+
+
+// 접근 권한을 확인하는 loader
+export const authCheckLoader = () => {
+  const userData = getUserData();
+
+  if(!userData) {
+    alert('로그인이 필요한 서비스입니다.');
+    return redirect('/');
+  }
+
+  return null; // 현재페이지에 머묾
+}
