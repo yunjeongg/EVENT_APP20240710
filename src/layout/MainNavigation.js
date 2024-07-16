@@ -1,8 +1,11 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteLoaderData } from 'react-router-dom';
 import styles from './MainNavigation.module.scss';
 
 const MainNavigation = () => {
+
+  // 로그인 한 경우 로그아웃 버튼 표시, 아니면 미표시
+  const userData = useRouteLoaderData('user-data');
 
   const activeFn = ({ isActive }) => {
     // NavLink 컴포넌트에 className프롭스에 함수를 전달하면
@@ -21,6 +24,14 @@ const MainNavigation = () => {
           <li>
             <NavLink to='events' className={activeFn}>Events</NavLink>
           </li>
+
+          {userData && (
+            <li>
+              <button style={{ width: '100%' }}>Logout</button>
+            </li>
+          )}
+
+
         </ul>
       </nav>
     </header>
