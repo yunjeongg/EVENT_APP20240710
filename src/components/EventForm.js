@@ -178,6 +178,13 @@ export const action = async ({ request, params }) => {
     body: JSON.stringify(payload),
   });
 
+  if(request.method === 'POST' && response.status === 401) { // 'POST'요청이면서, 401 오류가 뜰 경우, 401 숫자열로 써야함, '401' (x)
+
+    const errorText = await response.text();
+    alert(errorText);
+
+  }
+
   return redirect('/events');
 
 };
