@@ -7,7 +7,7 @@ import RootLayout from '../layout/RootLayout';
 import ErrorPage from '../pages/ErrorPage';
 import Events from '../pages/Events';
 import EventDetail, 
-  { loader as eventDetailLoader, action as deleteAction, action } 
+  { loader as eventDetailLoader, action as deleteAction } 
 from '../pages/EventDetail';
 import EventLayout from '../layout/EventLayout';
 import NewEvent from '../pages/NewEvent';
@@ -19,6 +19,7 @@ import SignUpPage from '../pages/SignUpPage';
 import { loginAction } from '../components/auth/LoginForm';
 import { authCheckLoader, userDataLoader } from './auth';
 import { logoutAction } from '../pages/Logout';
+import EventProvider from '../components/context/EventProvider';
 
 
 // 라우터 설정
@@ -87,7 +88,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: <EventLayout />,
+        element: (
+                    <EventProvider>
+                      <EventLayout />
+                    </EventProvider>
+                  ),
         loader: authCheckLoader,
         children: eventsRouter
       },
