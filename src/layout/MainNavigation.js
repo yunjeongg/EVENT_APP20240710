@@ -19,10 +19,10 @@ const MainNavigation = () => {
       <nav>
         <ul className={styles.list}>
           <li>
-            <NavLink to='' className={activeFn} end>Home</NavLink>
+            <NavLink to='' className={activeFn} end>홈</NavLink>
           </li>
           <li>
-            <NavLink to='events' className={activeFn}>Events</NavLink>
+            <NavLink to='events' className={activeFn}>이벤트들</NavLink>
           </li>
 
           {userData && (
