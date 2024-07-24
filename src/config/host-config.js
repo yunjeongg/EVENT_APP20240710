@@ -11,7 +11,7 @@ let backendHostName;
 if (clientHostName === 'localhost') {
   backendHostName = 'http://localhost:' + LOCAL_PORT;
 } else if (clientHostName === 'my-event-app-12345.s3-website.ap-northeast-2.amazonaws.com') {
-  backendHostName = 'http://54.180.247.181:8989';
+  backendHostName = 'http://13.125.3.218:8989';
 }
 
 const API_BASE_URL = backendHostName;
