@@ -9,7 +9,8 @@ const clientHostName = window.location.hostname;
 let backendHostName;
 
 if (clientHostName === 'localhost') {
-  backendHostName = 'http://localhost:' + LOCAL_PORT;
+  // backendHostName = 'http://localhost:' + LOCAL_PORT;
+  backendHostName = 'http://localhost:'; // docker 로 연결시
 } else if (clientHostName === 'my-event-app-12345.s3-website.ap-northeast-2.amazonaws.com') {
   backendHostName = 'http://3.38.86.99:8989';
 }
